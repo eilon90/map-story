@@ -3,10 +3,32 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from 'mobx-react'
+import {UserStore as userStore} from './stores/UserStore';
+import {Page as page} from './stores/Page';
+import {Search as search} from './stores/Search';
+import {MapStore as mapStore} from './stores/MapStore';
+import {NewStoryStore as newStoryStore} from './stores/NewStoryStore';
+
+const UserStore = new userStore();
+const Page = new page();
+const NewStoryStore = new newStoryStore();
+const MapStore = new mapStore(UserStore, NewStoryStore);
+const Search = new search();
+
+const stores = {
+  UserStore,
+  Page,
+  MapStore,
+  NewStoryStore,
+  Search
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider {...stores}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
