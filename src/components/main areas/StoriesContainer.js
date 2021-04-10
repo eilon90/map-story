@@ -7,6 +7,8 @@ import UserPage from '../userPage/UserPage';
 import NewStory from '../newStory/NewStory';
 import EventsList from '../newStory/EventsList';
 import SearchUser from '../users/SearchUser';
+import Login from '../login/Login';
+import Register from '../login/Register';
 import { useEffect } from 'react';
 const axios = require('axios');
 
@@ -40,7 +42,9 @@ const StoriesContainer = inject('MapStore', 'UserStore', 'Page', 'NewStoryStore'
 
     return (
         <div className = {classes.container}>
-            <Route exact path="/"><Redirect to={`/userPage/${UserStore.userId}`} /></Route>
+            <Route exact path="/"><Redirect to={localStorage.userId ? `/userPage/${localStorage.userId}` : 'login'} /></Route>
+            <Route exact path="/login" render={() => <Login/>}/>
+            <Route exact path="/register" render={() => <Register/>}/>
             <Route exact path="/userPage/:userId" render={() => <UserPage />}/>
             <Route exact path="/searchUser" render={() => <SearchUser />}/>
             <Route exact path="/storyPage/:userId/:storyId" render={() => <StoryScreen/>}/>

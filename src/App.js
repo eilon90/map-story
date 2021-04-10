@@ -33,7 +33,10 @@ const App = inject('UserStore', 'MapStore')(observer((props) => {
 
     useEffect(() => {
         // MapStore.getCountries();
-        UserStore.fetchUser();
+        if (localStorage.userId) {
+            UserStore.setUserId(localStorage.userId);
+            UserStore.fetchUser();
+          }
     }, [])
 
     return (

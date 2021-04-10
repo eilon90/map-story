@@ -5,8 +5,8 @@ const axios = require('axios');
 export class UserStore {
     constructor() {
 
-        // this.userId = '603d0440c068a2820c5f4850';
-        this.userId = '606e0d76480bac4c3c87429f';
+        this.userId = '';
+        // this.userId = '606e0d76480bac4c3c87429f';
         this.user = {};
         this.currentStoryId = '';
         // this.otherUser = false;
@@ -31,7 +31,11 @@ export class UserStore {
             nextPhoto: action,
             moveToFirstPhoto: action,
             resetStories: action,
-            getColoredMarkers: action
+            getColoredMarkers: action,
+            login: action,
+            setUserId: action,
+            registerUser: action,
+            signOut: action
         })
     }
 
@@ -90,6 +94,38 @@ export class UserStore {
       this.watchedUser = user.data;
       // this.otherUser = (id === this.userId) ? false : true;
       this.getColoredMarkers('watchedUser');
+    }
+
+    async login(email, password) {
+      try {
+        const userId = await axios.post(`http://localhost:4000/authenticate`, {email, password});
+        this.userId = userId.data;
+        localStorage.setItem('userId', userId.data);
+        return 'ok';
+      }
+      catch (err) {
+        return err.response.data.error;
+      }
+    }
+
+    setUserId = userId => this.userId = userId;
+
+    async registerUser(newUser) {
+      try {
+        const userId = await axios.post(`http://localhost:4000/user`, newUser);
+        if (userId.data.error) {return userId.data.error}
+        this.userId = userId.data;
+        localStorage.setItem('userId', userId.data);
+        return "ok";
+      }
+      catch (err) {
+        return err.response.data.error;
+      }
+    }
+    
+    signOut() {
+      this.userId = '';
+      this.user = {};
     }
 }
 

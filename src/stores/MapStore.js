@@ -217,10 +217,9 @@ export class MapStore {
     }
 
     removeAllMarkers() {
-        this.UserStore.user.stories.forEach(s => this.removeMarkers(s.events));
-        if (this.UserStore.watchedUser.stories) {
-            this.UserStore.watchedUser.stories.forEach(s => this.removeMarkers(s.events))
-        }
+        if (this.UserStore.userId) {this.UserStore.user.stories.forEach(s => this.removeMarkers(s.events))}
+        if (this.UserStore.watchedUser.stories) {this.UserStore.watchedUser.stories.forEach(s => this.removeMarkers(s.events))}
+        if(this.NewStoryStore.eventsList) {this.removeMarkers(this.NewStoryStore.eventsList)}
         this.resetCountry();
     }
 
@@ -238,5 +237,8 @@ export class MapStore {
         this.map.setView(this.bounds, 3, this.map.getZoom(), {"animate": true, "pan": {"duration": 10}});
     }
 
-    resetCountry = () => this.country = '';
+    resetCountry() {
+        this.country = '';
+        this.backToGlobalZoom();
+    }
 }

@@ -42,6 +42,7 @@ const EventsList = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(obse
         },
         eventTitle: {
             fontWeight: 'bold',
+            cursor: 'pointer',
             // textAlign: 'center'
             width: '50%'
         }

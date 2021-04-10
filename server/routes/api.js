@@ -5,6 +5,8 @@ const cloudinary = require('cloudinary').v2;
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const jwt = require('jsonwebtoken');
+const secret = 'secretMapStory';
 
 router.use(express.json());
 router.use(express.urlencoded({extended: false}));
@@ -109,8 +111,13 @@ router.get('/search/stories', async function (req, res) {
 
 router.post('/user', async function(req, res) {
     const u1 = new User({...req.body});
-    await u1.save();
-    res.end();
+    const emailInUse = await User.find({email: u1.email});
+    if (emailInUse[0]) {
+        res.send({error: 'Email already in use'});
+        return;
+    }
+    const user = await u1.save();
+    res.send(user._id);
 })
 
 router.post('/story/:userId', async function(req, res) {
@@ -143,6 +150,33 @@ router.post('/changeStory/:userId/:storyId', async function(req, res) {
     await User.findByIdAndUpdate(userId, {stories: stories}, {new: true});
     res.end();
 })
+
+router.post('/authenticate', async function(req, res) {
+    const { email, password } = req.body;
+    await User.findOne({ email }, function(err, user) {
+        if (err) {
+            console.error(err);
+            res.status(500).send({error: 'Internal error please try again'});
+        } 
+        else if (!user) {
+            res.status(401).send({error: 'Incorrect email or password'});
+        } 
+        else {
+        user.isCorrectPassword(password, function(err, same) {
+          if (err) {res.status(500).send({error: 'Internal error please try again'});
+          } 
+          else if (!same) {
+              res.status(401).send({error: 'Incorrect email or password'})
+            } 
+          else {
+            const payload = { email };
+            const token = jwt.sign(payload, secret, {expiresIn: '1h'});
+            res.cookie('token', token, { httpOnly: true }).send(user._id);
+            }
+        });
+      }
+    });
+  });
 
 router.delete('/story/:userId/:storyId', async function(req, res) {
     const stories = [];
@@ -185,9 +219,7 @@ router.post('/coors/:userId/:storyId/:eventId', async function (req, res) {
 
 router.post('/deleteImage', async function(req, res) {
     let imageId = req.body.imageId;
-    console.log(imageId);
     await cloudinary.uploader.destroy(imageId, function(err, result) {
-        console.log(result)
         res.send(result)
     });
 })

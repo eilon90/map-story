@@ -27,7 +27,8 @@ const StoryFullScreen = inject('UserStore', 'Page', 'MapStore')(observer((props)
     }))
     const classes = useStyles();
 
-    const thisUser = UserStore.user.stories ? UserStore.user.stories.some(s => s._id === UserStore.currentStoryId) : null;
+    let thisUser = UserStore.user.stories ? UserStore.user.stories.some(s => s._id === UserStore.currentStoryId) : null;
+    if (!UserStore.userId) {thisUser = false}
     let stories;
     switch (thisUser) {
         case true: stories = UserStore.user ? UserStore.user.stories : null;

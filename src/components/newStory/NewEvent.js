@@ -1,6 +1,6 @@
 import {inject, observer} from 'mobx-react';
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
-import { AddPhotoAlternate, Check, Close } from '@material-ui/icons';
+import { AddPhotoAlternate, Check, Close, Delete } from '@material-ui/icons';
 import { MapStore } from '../../stores/MapStore';
 
 const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observer((props) => {
@@ -59,6 +59,10 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between'
+        },
+        deletePhoto: {
+            color: '#DC143C',
+            cursor: 'pointer'
         }
     }))
     const classes = useStyles();
@@ -83,9 +87,9 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
         NewStoryStore.backToEventsList();
     }
 
-    const changeEvent = () => {
+    const changeEvent = async () => {
         MapStore.changeEditToNewStory(NewStoryStore.eventsList[NewStoryStore.eventNum]);
-        NewStoryStore.changeEvent();
+        await NewStoryStore.changeEvent();
         NewStoryStore.backToEventsList();
     }
 
@@ -96,6 +100,8 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
     }
 
     const openPhotoPopup = () => Page.openPhotoPopup();
+
+    const deleteOnePhoto = (p, index) => NewStoryStore.deleteOnePhoto(p, index);
 
     return (
         <div className = {classes.newEvent}>
@@ -113,6 +119,7 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
                     {NewStoryStore.photos.map((p, index) => <div className = {classes.pictureCard}>
                         <img className = {classes.img} key = {index} src = {p.url}/>
                         <Typography className = {classes.photoDes} variant = 'h6'>{p.description}</Typography>
+                        <Delete className = {classes.deletePhoto} onClick = {() => deleteOnePhoto(p, index)}/>
                     </div>)}
                 </div>
             </div>

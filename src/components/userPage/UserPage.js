@@ -24,6 +24,11 @@ const UserPage = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
             marginTop: '3%',
             fontWeight: 'bold'
         },
+        storiesTitle: {
+            textAlign: 'left',
+            marginBottom: '3%',
+            fontWeight: 'bold'
+        },
         button: {
             float: 'bottom',
             bottom: '1px'
@@ -53,9 +58,7 @@ const UserPage = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
         black: '#3D3D3D',
     }
 
-    const chooseStory = () => {
-        MapStore.removeAllMarkers();
-    }
+    const chooseStory = () => MapStore.removeAllMarkers();
 
     const removeMarkers = () => MapStore.removeAllMarkers();
 
@@ -79,8 +82,9 @@ const UserPage = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
 
     return (
         <div className = {classes.userPage}>
-            <Typography variant = 'h4' className = {classes.title}>{`${user && user.firstName}'s Stories`}</Typography>
+            <Typography variant = 'h4' className = {classes.title}>{`${user && user.firstName} ${user && user.lastName}`}</Typography>
             <div className= {classes.storiesCon}>
+                <Typography variant = 'h6' className = {classes.storiesTitle}>{'Stories:'}</Typography>
                 {stories && stories.map((s, index) => <Button style = {{color: `${colors[s.color]}`}} key = {index} onClick = {chooseStory} component={Link} to={`/storyPage/${userId}/${s._id}`}>{s.title}</Button>)}
             </div>
             {thisUser && <Button className = {classes.button} variant="contained" color="primary" disableElevation onClick = {removeMarkers} component={Link} to={'/newStory'}> Create a new Story </Button>}
