@@ -40,7 +40,7 @@ export class UserStore {
     }
 
     fetchUser = async() => {
-      const user = await axios.get(`http://localhost:4000/user/${this.userId}`);
+      const user = await axios.get(`/user/${this.userId}`);
       this.user = user.data;
       // this.user.stories.forEach(s => {
       //   s.events.forEach(e => {
@@ -90,7 +90,7 @@ export class UserStore {
     }
 
     fetchWatchedUser = async(id) => {
-      const user = await axios.get(`http://localhost:4000/watchedUser/${id}`);
+      const user = await axios.get(`/watchedUser/${id}`);
       this.watchedUser = user.data;
       // this.otherUser = (id === this.userId) ? false : true;
       this.getColoredMarkers('watchedUser');
@@ -98,7 +98,7 @@ export class UserStore {
 
     async login(email, password) {
       try {
-        const userId = await axios.post(`http://localhost:4000/authenticate`, {email, password});
+        const userId = await axios.post(`/authenticate`, {email, password});
         this.userId = userId.data;
         localStorage.setItem('userId', userId.data);
         return 'ok';
@@ -112,7 +112,7 @@ export class UserStore {
 
     async registerUser(newUser) {
       try {
-        const userId = await axios.post(`http://localhost:4000/user`, newUser);
+        const userId = await axios.post(`/user`, newUser);
         if (userId.data.error) {return userId.data.error}
         this.userId = userId.data;
         localStorage.setItem('userId', userId.data);

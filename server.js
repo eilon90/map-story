@@ -5,7 +5,9 @@ const api = require('./server/routes/api');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
-mongoose.connect(`mongodb+srv://eilon90:${process.env.atlas}@mapstory.k44ic.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(`mongodb+srv://eilon90:${process.env.atlas}@mapstory.k44ic.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true })ף
+
+app.use(express.static(path.join(__dirname, 'build')));
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
@@ -15,6 +17,10 @@ app.use(function (req, res, next) {
     next()
 })
 app.use('/', api);
+
+app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 const port = 4000;
 app.listen(process.env.port || port, function() {
