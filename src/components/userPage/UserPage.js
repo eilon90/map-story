@@ -11,18 +11,19 @@ const UserPage = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            height: '100%'
         },
         storiesCon: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            height: '77vh'
+            height: '77%'
         },
         title: {
             textAlign: 'center',
             marginTop: '3%',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
         },
         storiesTitle: {
             textAlign: 'left',
@@ -32,6 +33,23 @@ const UserPage = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
         button: {
             float: 'bottom',
             bottom: '1px'
+        },
+        navMenu: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '3%'
+        },
+        examples: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: '3%'
+        },
+        navButton: {
+            fontWeight: 'bold'
         }
     }))
     const classes = useStyles();
@@ -82,12 +100,27 @@ const UserPage = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
 
     return (
         <div className = {classes.userPage}>
-            <Typography variant = 'h4' className = {classes.title}>{`${user && user.firstName} ${user && user.lastName}`}</Typography>
-            <div className= {classes.storiesCon}>
-                <Typography variant = 'h6' className = {classes.storiesTitle}>{'Stories:'}</Typography>
-                {stories && stories.map((s, index) => <Button style = {{color: `${colors[s.color]}`}} key = {index} onClick = {chooseStory} component={Link} to={`/storyPage/${userId}/${s._id}`}>{s.title}</Button>)}
-            </div>
-            {thisUser && <Button className = {classes.button} variant="contained" color="primary" disableElevation onClick = {removeMarkers} component={Link} to={'/newStory'}> Create a new Story </Button>}
+            {user._id !== '607321afe1775a0c7c5af5f8' && <>
+                <Typography variant = 'h4' className = {classes.title}>{`${user && user.firstName} ${user && user.lastName}`}</Typography>
+                <div className= {classes.storiesCon}>
+                    <Typography variant = 'h6' className = {classes.storiesTitle}>{'Stories:'}</Typography>
+                    {stories && stories.map((s, index) => <Button style = {{color: `${colors[s.color]}`}} key = {index} onClick = {chooseStory} component={Link} to={`/storyPage/${userId}/${s._id}`}>{s.title}</Button>)}
+                </div>
+                {thisUser && <Button className = {classes.button} variant="contained" color="primary" disableElevation onClick = {removeMarkers} component={Link} to={'/newStory'}> Create a new Story </Button>}
+            </>}
+
+            {user._id === '607321afe1775a0c7c5af5f8' && <>
+                <Typography variant = 'h4' className = {classes.title}>{'Welcome to Mapstore'}</Typography>
+                <div className= {classes.navMenu}>
+                    <Button className= {classes.navButton} color = 'primary' component = {Link} to = '/login'>Sign in and start to Create your stories</Button>
+                    <Button className= {classes.navButton} color = 'primary' component = {Link} to = '/register'>New visitor? create your account here</Button>
+                    <Button className= {classes.navButton} color = 'primary' component = {Link} to = '/searchUser'>Search for other users and stories</Button>
+                </div>
+                <div className= {classes.examples}>
+                    <Typography variant = 'h6' className = {classes.storiesTitle}>{'Watch stories examples:'}</Typography>
+                    {stories && stories.map((s, index) => <Button style = {{color: `${colors[s.color]}`}} key = {index} onClick = {chooseStory} component={Link} to={`/storyPage/${userId}/${s._id}`}>{s.title}</Button>)}
+                </div>
+            </>}
         </div>
     )
 }))

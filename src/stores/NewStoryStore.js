@@ -17,8 +17,9 @@ export class NewStoryStore {
         this.eventNum = -1;
         this.newStory = true;
         this.storyId = '';
-        this.privatStory = false;
+        this.privateStory = false;
         this.photosToDelete = [];
+        this.newPhotos = [];
 
         makeObservable(this, {
             storyTitle: observable,
@@ -34,8 +35,9 @@ export class NewStoryStore {
             newStory: observable,
             eventNum: observable,
             storyId: observable,
-            privatStory: observable,
+            privateStory: observable,
             photosToDelete: observable,
+            newPhotos: observable,
             typeStoryTitle: action,
             typeStoryDesc: action,
             typeEventTitle: action,
@@ -46,7 +48,7 @@ export class NewStoryStore {
             closeEventEditing: action,
             backToEventsList: action,
             editCoordinates: action,
-            deleteNewStory: action,
+            deleteStory: action,
             addPhoto: action,
             addEvent: action,
             changeEvent: action,
@@ -55,7 +57,7 @@ export class NewStoryStore {
             deleteEvent: action,
             moveUpward: action,
             moveDownward: action,
-            deletePhotos: action,
+            deleteNewEventPhotos: action,
             deleteStoryPhotos: action,
             openEdit: action,
             cancelEditing: action,
@@ -70,16 +72,16 @@ export class NewStoryStore {
     typeEventTitle = str => this.eventTitle = str;
     typeEventDesc = str => this.eventDescription = str;
 
-    async deleteNewStory(userId) {
-        if (this.eventsList[0]) {await this.deletePhotos()}
+    async deleteStory(userId) {
+        if (this.eventsList[0]) {await this.deleteStoryPhotos()}
         this.storyTitle = '';
         this.storyDescription = '';
-        this.privatStory = false;
+        this.privateStory = false;
         this.eventsList = [];
         this.photosToDelete = [];
+        this.newPhotos = [];
         this.makeMapUnactive();
         if (!this.newStory) {
-            await this.deleteStoryPhotos();
             await axios.delete(`http://localhost:4000/story/${userId}/${this.storyId}`);
             this.newStory = true;
             this.storyId = '';
@@ -113,6 +115,7 @@ export class NewStoryStore {
             url: url
         }
         this.photos.push(photo);
+        if (!this.newStory) {this.newPhotos.push(id)}
     }
 
     addEvent() {
@@ -138,25 +141,31 @@ export class NewStoryStore {
             newEvent.photos = [];
             this.photos.forEach(p => newEvent.photos.push(p));
         }
+        if (!this.newStory) {newEvent.newEvent = true}
         this.eventsList.push(newEvent);
     }
 
     async changeEvent() {
-        const changedEvent = this.eventsList[this.eventNum];
+        const changedEvent = {};
         changedEvent.title = this.eventTitle;
         changedEvent.description = this.eventDescription;
-        changedEvent.coordinates.latitude = this.eventCoordinate[0];
-        changedEvent.coordinates.longtitude = this.eventCoordinate[1];
-
-        if (this.eventList[this.eventNum].this.photos[0]) {
-            this.eventList[this.eventNum].this.photos.forEach(async (p, index) => {
-                if ((!this.photos[index]) || p.cloudinary_id !== this.photos[index].cloudinary_id) {
-                    if (this.newStory) {
-                        await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id})
+        changedEvent.coordinates = {
+            latitude: this.eventCoordinate[0],
+            longtitude: this.eventCoordinate[1]
+        }
+        changedEvent.marker = this.eventsList[this.eventNum].marker;
+        if (this.eventsList[this.eventNum].photos) {
+            let num = 0;
+            this.eventsList[this.eventNum].photos.forEach(async (p, index) => {
+                if ((!this.photos[0]) || p.cloudinary_id !== this.photos[index + num].cloudinary_id) {
+                    console.log(`${index} || ${index + num}`);
+                    if (this.newStory || this.eventsList[this.eventNum].newStory) {
+                        await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id});
                     }
                     else {
                         this.photosToDelete.push(p.cloudinary_id)
                     }
+                    num--;
                 }
             })
         }
@@ -166,7 +175,7 @@ export class NewStoryStore {
             this.photos.forEach(p => changedEvent.photos.push(p));
         }
 
-        this.eventsList[this.eventNum] = changedEvent;
+        this.eventsList.splice(this.eventNum, 1, changedEvent);
 
         this.eventNum = -1;
     }
@@ -174,10 +183,15 @@ export class NewStoryStore {
     async saveStory(userId) {
         this.makeMapUnactive();
         this.eventsList.forEach(e => delete(e.marker));
+        if (!this.newStory) {
+            this.eventsList.forEach(e => {
+                if (e.newEvent) {delete e.newEvent}
+            })
+        }
         const story = {
             title: this.storyTitle,
             description: this.storyDescription,
-            private: this.privatStory,
+            private: this.privateStory,
             events: this.eventsList
         }
         if (this.newStory) {await axios.post(`http://localhost:4000/story/${userId}`, story)}
@@ -190,10 +204,11 @@ export class NewStoryStore {
         }
         this.storyTitle = '';
         this.storyDescription = '';
-        this.privatStory = false;
+        this.privateStory = false;
         this.eventsList = [];
         this.newStory = true;
         this.storyId = '';
+        this.newPhotos = [];
     }
 
     editEvent(event, index) {
@@ -206,7 +221,14 @@ export class NewStoryStore {
         this.eventNum = index;
     }
 
-    deleteEvent = index => this.eventsList.splice(index, 1);
+    async deleteEvent(index) {
+        if (this.eventsList[index].photos && this.newStory) {await this.eventsList[index].photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
+        if (this.eventsList[index].photos && !this.newStory) {
+            if (this.eventsList[index].newEvent) {await this.eventsList[index].photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
+            this.eventsList[index].photos.forEach(p => this.photosToDelete.push(p.cloudinary_id))
+        }
+        this.eventsList.splice(index, 1);
+    } 
 
     moveUpward(index) {
         const event = this.eventsList[index];
@@ -220,18 +242,19 @@ export class NewStoryStore {
         this.eventsList.splice(index + 1, 0 , event);
     }
 
-    async deletePhotos() {
+    async deleteNewEventPhotos() {
         if (this.newEvent && this.photos[0]) {this.photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
         else if (this.photos[0]) {
             this.photos.forEach(async p => {if (this.eventsList[this.eventNum].photos.every(ph => ph.cloudinary_id !== p.cloudinary_id)) {
                 await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id});
             }})
         }
-        else if (this.newEvent) {
-            this.eventsList.forEach(async e => {if (e.photos) {
-                e.photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}));
-            }})
-        }
+        // else if (this.newEvent) {
+        //     //got you!!!!!!!
+        //     this.eventsList.forEach(async e => {if (e.photos) {
+        //         e.photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}));
+        //     }})
+        // }
     }
 
     async deleteStoryPhotos() {
@@ -251,7 +274,7 @@ export class NewStoryStore {
         this.newStory = false;
         this.storyId = story._id;
         this.storyTitle = story.title;
-        this.privatStory = story.private;
+        this.privateStory = story.private;
         this.storyDescription = story.description;
         story.events.forEach((e, index) => {
             // this.eventsList.push(e)
@@ -283,16 +306,26 @@ export class NewStoryStore {
     }
 
     async cancelEditing() {
+        if (this.newPhotos[0]) {
+            this.newPhotos.forEach(async n => await axios.post('http://localhost:4000/deleteImage', {imageId: n.id}));
+        }
         this.storyId = '';
         this.newStory = true;
-        await this.deleteNewStory();
+         this.storyTitle = '';
+        this.storyDescription = '';
+        this.privateStory = false;
+        this.eventsList = [];
+        this.photosToDelete = [];
+        this.newPhotos = [];
         this.makeMapUnactive();
     }
 
-    changePrivacy = value => this.privatStory = value;
+    changePrivacy = value => this.privateStory = value;
 
     async deleteOnePhoto(photo, index) {
         this.photos.splice(index, 1);
-        if (this.newEvent) {await axios.post('http://localhost:4000/deleteImage', {imageId: photo.cloudinary_id})}
+        if (this.newEvent || (!this.eventsList[this.eventNum].photos) || (!this.eventsList[this.eventNum].photos[index]) || this.eventsList[this.eventNum].photos[index].cloudinary_id !== photo.cloudinary_id) {
+            await axios.post('http://localhost:4000/deleteImage', {imageId: photo.cloudinary_id})
+        }
     }
 }

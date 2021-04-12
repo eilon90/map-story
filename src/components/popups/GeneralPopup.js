@@ -16,11 +16,11 @@ const GeneralPopup = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(ob
     let func;
 
     switch (Page.popupAction) {
-        case 'deleteNewStory': {
+        case 'deleteStory': {
             text = 'Are you sure you want to delete the story?';
             func = async () => {
                 MapStore.removeMarkers(NewStoryStore.eventsList);
-                await NewStoryStore.deleteNewStory(UserStore.userId);
+                await NewStoryStore.deleteStory(UserStore.userId);
                 await UserStore.fetchUser();
                 MapStore.backToGlobalZoom();
                 history.push('/');

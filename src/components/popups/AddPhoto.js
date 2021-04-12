@@ -75,6 +75,9 @@ const AddPhoto = inject('UserStore', 'Page', 'NewStoryStore')(observer((props) =
 
     const cancel = async () => {
         if (id) {await axios.post('http://localhost:4000/deleteImage', {imageId: id})}
+        setId('');
+        setDescription('');
+        setUrl('');
         Page.closePhotoPopup();
     }
 

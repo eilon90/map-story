@@ -42,7 +42,7 @@ const StoriesContainer = inject('MapStore', 'UserStore', 'Page', 'NewStoryStore'
 
     return (
         <div className = {classes.container}>
-            <Route exact path="/"><Redirect to={localStorage.userId ? `/userPage/${localStorage.userId}` : 'login'} /></Route>
+            <Route exact path="/"><Redirect to={localStorage.userId ? `/userPage/${localStorage.userId}` : '/userPage/607321afe1775a0c7c5af5f8'} /></Route>
             <Route exact path="/login" render={() => <Login/>}/>
             <Route exact path="/register" render={() => <Register/>}/>
             <Route exact path="/userPage/:userId" render={() => <UserPage />}/>

@@ -48,7 +48,7 @@ const NewStory = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
     const makeMapActive = () => NewStoryStore.makeMapActive();
     const changePrivacy = e => NewStoryStore.changePrivacy(e.target.value);
     const deleteTitleAndDesc = () => {
-        NewStoryStore.deleteNewStory();
+        NewStoryStore.deleteStory();
         MapStore.backToGlobalZoom();
     }
 

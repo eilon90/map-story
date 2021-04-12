@@ -51,7 +51,7 @@ const EventsList = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(obse
     const history = useHistory();
 
     const eventsList = NewStoryStore.eventsList;
-    const openDeleteStoryPopup = () => Page.openGeneralPopup('deleteNewStory');
+    const openDeleteStoryPopup = () => Page.openGeneralPopup('deleteStory');
 
     const saveStory = async () => {
         MapStore.removeMarkers(NewStoryStore.eventsList);
@@ -74,7 +74,11 @@ const EventsList = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(obse
         // MapStore.getNewStoryMarkers(NewStoryStore.eventsList);
     }
 
-    const deleteEvent = index => NewStoryStore.deleteEvent(index);
+    const deleteEvent = index => {
+        MapStore.removeNewEventMarker(index);
+        NewStoryStore.deleteEvent(index);
+    }
+
     const moveUpward = index => NewStoryStore.moveUpward(index);
     const moveDownward = index => NewStoryStore.moveDownward(index);
 

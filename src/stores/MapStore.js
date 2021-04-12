@@ -46,7 +46,8 @@ export class MapStore {
             removeAllMarkers: action,
             fitStoryBounds: action,
             backToGlobalZoom: action,
-            resetCountry: action
+            resetCountry: action,
+            removeNewEventMarker: action
         })
     }
 
@@ -240,5 +241,9 @@ export class MapStore {
     resetCountry() {
         this.country = '';
         this.backToGlobalZoom();
+    }
+
+    removeNewEventMarker(index) {
+        this.map.removeLayer(this.NewStoryStore.eventsList[index].marker);
     }
 }

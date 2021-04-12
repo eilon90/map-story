@@ -94,7 +94,7 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
     }
 
     const cancel = () => {
-        NewStoryStore.deletePhotos();
+        NewStoryStore.deleteNewEventPhotos();
         NewStoryStore.newEvent ? MapStore.removeEditMarker() : MapStore.changeEditToNewStory(NewStoryStore.eventsList[NewStoryStore.eventNum]);
         NewStoryStore.backToEventsList();
     }

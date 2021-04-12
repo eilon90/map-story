@@ -41,7 +41,7 @@ const Navbar = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
     return (
         <AppBar className = {classes.navbar} position = 'static'>
             <Tabs value = {Page.currentTab} onChange = {changeTab}> 
-                <Tab className = {classes.tab} label = {UserStore.userId ? 'Your stories' : 'Log in'} onClick = {removeMarkers} component={Link}  to="/" {...a11yProps(0)}/>
+                <Tab className = {classes.tab} label = {UserStore.userId ? 'Your stories' : 'Log in'} onClick = {removeMarkers} component={Link}  to = {UserStore.userId ? `/userPage/${UserStore.userId}` : '/login'} {...a11yProps(0)}/>
                 <Tab className = {classes.tab} label = 'Watch stories' onClick = {removeMarkers} component={Link}  to="/searchUser" {...a11yProps(1)}/>
             </Tabs>
             {UserStore.userId && <IconButton onClick={signOut}><ExitToApp /></IconButton>}
