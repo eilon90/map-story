@@ -16,7 +16,7 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
             height: '50vh'
         }, 
         img: {
-            maxWidth: '90vw',
+            maxWidth: '90%',
             maxHeight: '73vh',
             objectFit: 'cover',
             display: 'block',
@@ -32,7 +32,7 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
             marginLeft: '3%',
             fontFamily: "'Kavivanar', cursive",
             display: 'inline',
-            width: '20%'
+            width: '30%'
         },
         eventDes: {
             color: '#222',
@@ -59,6 +59,7 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
             borderRadius: '10px',
             width: '100%',
             display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center'
         },
@@ -67,9 +68,8 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
             width: '27%',
             display: 'flex',
             justifyContent: 'space-around',
-            margin: '0 auto',
-            padding: '0',
-            marginRight: '22.5%'
+            margin: '0 3%',
+            padding: '0'
         },
         stepperButton: {
             position: 'relative',
@@ -86,7 +86,11 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
             justifyContent: 'space-around'
         },
         photobutton: {
-            width: '2%'
+            width: '8%'
+        },
+        photoTextToggle: {
+            width: '15%',
+            marginLeft: '18%'
         }
     }))
     const classes = useStyles();
@@ -140,10 +144,12 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
                     backButton={<Button size="small" className = {classes.stepperButton} onClick={handleBack} disabled={UserStore.currentEvent === 0}>
                     {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />} Back </Button>}
                 />
-                <BottomNavigation value = {Page.photoTextToggle} onChange = {photoTextChange} showLabels className={classes.nav}>
-                    <BottomNavigationAction label="View Photos" icon={<Subject />} />
-                    <BottomNavigationAction label="View Text" icon={<Photo />} />
-                </BottomNavigation>
+                <div className = {classes.photoTextToggle}>
+                    <BottomNavigation value = {Page.photoTextToggle} onChange = {photoTextChange} showLabels className={classes.nav}>
+                        <BottomNavigationAction label="View Photos" icon={<Subject />} />
+                        <BottomNavigationAction label="View Text" icon={<Photo />} />
+                    </BottomNavigation>
+                </div>
             </div>
 
             {Page.photoTextToggle === 0 && photo && <div className = {classes.pictureWithArrows}>

@@ -8,8 +8,8 @@ import { useEffect } from 'react';
 import GeneralPopup from './components/popups/GeneralPopup';
 import AddPhoto from './components/popups/AddPhoto';
 
-const App = inject('UserStore', 'MapStore')(observer((props) => {
-    const {UserStore, MapStore} = props;
+const App = inject('UserStore')(observer((props) => {
+    const {UserStore} = props;
 
     const theme = createMuiTheme({
         palette: {
@@ -32,7 +32,6 @@ const App = inject('UserStore', 'MapStore')(observer((props) => {
     const classes = useStyles();
 
     useEffect(() => {
-        // MapStore.getCountries();
         if (localStorage.userId) {
             UserStore.setUserId(localStorage.userId);
             UserStore.fetchUser();

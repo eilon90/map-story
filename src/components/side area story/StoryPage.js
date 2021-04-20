@@ -20,7 +20,8 @@ const StoryPage = inject('UserStore', 'MapStore', 'Page', 'NewStoryStore')(obser
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            height: '80%'
+            height: '80%',
+            width: '100%'
         },
         title: {
             textAlign: 'center',

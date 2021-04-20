@@ -23,8 +23,8 @@ export class Search {
     async searchUser() {
         this.users = [];
         this.stories = [];
-        // const results = await axios.get(`http://localhost:4000/search/users?q=${this.searchStirng}`);
-        const results = await axios.get(`/search/users?q=${this.searchStirng}`);
+        const results = await axios.get(`http://localhost:4000/search/users?q=${this.searchStirng}`);
+        // const results = await axios.get(`/search/users?q=${this.searchStirng}`);
         results.data.forEach(d => this.users.push(d));
         this.searchStirng = '';
     }
@@ -32,8 +32,8 @@ export class Search {
     async searchStory() {
         this.users = [];
         this.stories = [];
-        // const results = await axios.get(`http://localhost:4000/search/stories?q=${this.searchStirng}`);
-        const results = await axios.get(`/search/stories?q=${this.searchStirng}`);
+        const results = await axios.get(`http://localhost:4000/search/stories?q=${this.searchStirng}`);
+        // const results = await axios.get(`/search/stories?q=${this.searchStirng}`);
         results.data.forEach(d => this.stories.push(d));
         this.searchStirng = '';
     }

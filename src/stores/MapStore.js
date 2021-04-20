@@ -51,8 +51,8 @@ export class MapStore {
 
     async changeCountry(val) {
         this.country = val;
-        // const result = await axios.get(`http://localhost:4000/bounds/${this.country}`);
-        const result = await axios.get(`/bounds/${this.country}`);
+        const result = await axios.get(`http://localhost:4000/bounds/${this.country}`);
+        // const result = await axios.get(`/bounds/${this.country}`);
         this.bounds = result.data;
         this.map.fitBounds(this.bounds, this.map.getZoom(), {"animate": true, "pan": {"duration": 15}});
     }
@@ -66,8 +66,8 @@ export class MapStore {
             alert('Please type an address for searching');
             return;
         }
-        // let results = await axios.get(`http://localhost:4000/search/${this.country}/${this.searchInput}`);
-        let results = await axios.get(`/search/${this.country}/${this.searchInput}`);
+        let results = await axios.get(`http://localhost:4000/search/${this.country}/${this.searchInput}`);
+        // let results = await axios.get(`/search/${this.country}/${this.searchInput}`);
         results = results.data;
         if (results.error === true) {
             alert("We couldn't find this address. Please try again");
@@ -212,6 +212,7 @@ export class MapStore {
         if (this.UserStore.userId) {this.UserStore.user.stories.forEach(s => this.removeMarkers(s.events))}
         if (this.UserStore.watchedUser.stories) {this.UserStore.watchedUser.stories.forEach(s => this.removeMarkers(s.events))}
         if(this.NewStoryStore.eventsList) {this.removeMarkers(this.NewStoryStore.eventsList)}
+        if (this.currentEventMarker) {this.map.removeLayer(this.currentEventMarker)}
         this.resetCountry();
     }
 

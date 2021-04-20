@@ -82,8 +82,8 @@ export class NewStoryStore {
         this.newPhotos = [];
         this.makeMapUnactive();
         if (!this.newStory) {
-            // await axios.delete(`http://localhost:4000/story/${userId}/${this.storyId}`);
-            await axios.delete(`/story/${userId}/${this.storyId}`);
+            await axios.delete(`http://localhost:4000/story/${userId}/${this.storyId}`);
+            // await axios.delete(`/story/${userId}/${this.storyId}`);
             this.newStory = true;
             this.storyId = '';
         }
@@ -160,8 +160,8 @@ export class NewStoryStore {
             this.eventsList[this.eventNum].photos.forEach(async (p, index) => {
                 if ((!this.photos[0]) || p.cloudinary_id !== this.photos[index + num].cloudinary_id) {
                     if (this.newStory || this.eventsList[this.eventNum].newStory) {
-                        // await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id});
-                        await axios.post('/deleteImage', {imageId: p.cloudinary_id});
+                        await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id});
+                        // await axios.post('/deleteImage', {imageId: p.cloudinary_id});
                     }
                     else {
                         this.photosToDelete.push(p.cloudinary_id)
@@ -195,16 +195,16 @@ export class NewStoryStore {
             private: this.privateStory,
             events: this.eventsList
         }
-        // if (this.newStory) {await axios.post(`http://localhost:4000/story/${userId}`, story)}
-        if (this.newStory) {await axios.post(`/story/${userId}`, story)}
+        if (this.newStory) {await axios.post(`http://localhost:4000/story/${userId}`, story)}
+        // if (this.newStory) {await axios.post(`/story/${userId}`, story)}
         else {
             if (this.photosToDelete[0]) {
-                // this.photosToDelete.forEach(async p => {await axios.post('http://localhost:4000/deleteImage', {imageId: p})});
-                this.photosToDelete.forEach(async p => {await axios.post('/deleteImage', {imageId: p})});
+                this.photosToDelete.forEach(async p => {await axios.post('http://localhost:4000/deleteImage', {imageId: p})});
+                // this.photosToDelete.forEach(async p => {await axios.post('/deleteImage', {imageId: p})});
                 this.photosToDelete = [];
             }
-            // await axios.post(`http://localhost:4000/changeStory/${userId}/${this.storyId}`, story)
-            await axios.post(`/changeStory/${userId}/${this.storyId}`, story)
+            await axios.post(`http://localhost:4000/changeStory/${userId}/${this.storyId}`, story)
+            // await axios.post(`/changeStory/${userId}/${this.storyId}`, story)
         }
         this.storyTitle = '';
         this.storyDescription = '';
@@ -228,8 +228,8 @@ export class NewStoryStore {
     async deleteEvent(index) {
         if (this.eventsList[index].photos && this.newStory) {await this.eventsList[index].photos.forEach(async p => await axios.post('/deleteImage', {imageId: p.cloudinary_id}))}
         if (this.eventsList[index].photos && !this.newStory) {
-            // if (this.eventsList[index].newEvent) {await this.eventsList[index].photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
-            if (this.eventsList[index].newEvent) {await this.eventsList[index].photos.forEach(async p => await axios.post('/deleteImage', {imageId: p.cloudinary_id}))}
+            if (this.eventsList[index].newEvent) {await this.eventsList[index].photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
+            // if (this.eventsList[index].newEvent) {await this.eventsList[index].photos.forEach(async p => await axios.post('/deleteImage', {imageId: p.cloudinary_id}))}
             this.eventsList[index].photos.forEach(p => this.photosToDelete.push(p.cloudinary_id))
         }
         this.eventsList.splice(index, 1);
@@ -248,12 +248,12 @@ export class NewStoryStore {
     }
 
     async deleteNewEventPhotos() {
-        // if (this.newEvent && this.photos[0]) {this.photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
-        if (this.newEvent && this.photos[0]) {this.photos.forEach(async p => await axios.post('/deleteImage', {imageId: p.cloudinary_id}))}
+        if (this.newEvent && this.photos[0]) {this.photos.forEach(async p => await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id}))}
+        // if (this.newEvent && this.photos[0]) {this.photos.forEach(async p => await axios.post('/deleteImage', {imageId: p.cloudinary_id}))}
         else if (this.photos[0]) {
             this.photos.forEach(async p => {if (this.eventsList[this.eventNum].photos.every(ph => ph.cloudinary_id !== p.cloudinary_id)) {
-                // await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id});
-                await axios.post('/deleteImage', {imageId: p.cloudinary_id});
+                await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id});
+                // await axios.post('/deleteImage', {imageId: p.cloudinary_id});
             }})
         }
     }
@@ -263,8 +263,8 @@ export class NewStoryStore {
             this.eventsList.forEach(async e => {
                 if (e.photos[0]) {
                     e.photos.forEach(p => async p => {
-                        // await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id})
-                        await axios.post('/deleteImage', {imageId: p.cloudinary_id})
+                        await axios.post('http://localhost:4000/deleteImage', {imageId: p.cloudinary_id})
+                        // await axios.post('/deleteImage', {imageId: p.cloudinary_id})
                     });
                 }
             })
@@ -305,8 +305,8 @@ export class NewStoryStore {
 
     async cancelEditing() {
         if (this.newPhotos[0]) {
-            // this.newPhotos.forEach(async n => await axios.post('http://localhost:4000/deleteImage', {imageId: n.id}));
-            this.newPhotos.forEach(async n => await axios.post('/deleteImage', {imageId: n.id}));
+            this.newPhotos.forEach(async n => await axios.post('http://localhost:4000/deleteImage', {imageId: n.id}));
+            // this.newPhotos.forEach(async n => await axios.post('/deleteImage', {imageId: n.id}));
         }
         this.storyId = '';
         this.newStory = true;
@@ -324,8 +324,8 @@ export class NewStoryStore {
     async deleteOnePhoto(photo, index) {
         this.photos.splice(index, 1);
         if (this.newEvent || (!this.eventsList[this.eventNum].photos) || (!this.eventsList[this.eventNum].photos[index]) || this.eventsList[this.eventNum].photos[index].cloudinary_id !== photo.cloudinary_id) {
-            // await axios.post('http://localhost:4000/deleteImage', {imageId: photo.cloudinary_id})
-            await axios.post('/deleteImage', {imageId: photo.cloudinary_id})
+            await axios.post('http://localhost:4000/deleteImage', {imageId: photo.cloudinary_id})
+            // await axios.post('/deleteImage', {imageId: photo.cloudinary_id})
         }
     }
 }
