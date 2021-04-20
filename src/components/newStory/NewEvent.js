@@ -1,10 +1,9 @@
 import {inject, observer} from 'mobx-react';
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
 import { AddPhotoAlternate, Check, Close, Delete } from '@material-ui/icons';
-import { MapStore } from '../../stores/MapStore';
 
-const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observer((props) => {
-    const {UserStore, Page, NewStoryStore, MapStore} = props;
+const NewEvent = inject('Page', 'NewStoryStore', 'MapStore')(observer((props) => {
+    const {Page, NewStoryStore, MapStore} = props;
     const useStyles = makeStyles(() => ({
         newEvent: {
             display: 'flex',
@@ -70,17 +69,6 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
     const typeTitle = e => NewStoryStore.typeEventTitle(e.target.value);
     const typeDesc = e => NewStoryStore.typeEventDesc(e.target.value);
 
-    // const uploadPhoto = async e => {
-    //     const file = e.target.files[0];
-    //     const newFormData = new FormData();
-    //     newFormData.append('file', file);
-    //     newFormData.append('upload_preset', 'eilon90_map_story');
-    //     const result = await axios.post('https://api.cloudinary.com/v1_1/eilon90/image/upload', newFormData);
-    //     if (result.data.secure_url && result.data.public_id) {
-    //         NewStoryStore.addPhoto(result.data.secure_url, result.data.public_id);
-    //     } 
-    // }
-
     const addEvent = () => {
         NewStoryStore.addEvent();
         MapStore.changeEditToNewStory(NewStoryStore.eventsList[NewStoryStore.eventsList.length - 1]);
@@ -109,7 +97,6 @@ const NewEvent = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
             <div className = {classes.innerNewEvent}>
                 <TextField className = {classes.textField}  label = 'Title' value = {NewStoryStore.eventTitle} onChange = {typeTitle}/>
                 <TextField className = {classes.textField} label = 'Description' multiline rows={20} variant="outlined" value = {NewStoryStore.eventDescription} onChange = {typeDesc}/>
-                {/* <Button variant="contained" startIcon={<AddPhotoAlternate/>} component="label">Add Photo<input type = 'file' onChange = {uploadPhoto} hidden/></Button> */}
                 <div className = {classes.photosHeader}>
                     <Typography variant = 'h6' style = {{fontWeight: 'BOLD'}}>Photos:</Typography>
                     <Button startIcon={<AddPhotoAlternate/>} onClick = {openPhotoPopup} disabled = {NewStoryStore.photos.length < 3 ? false : true}>Add Photo</Button>

@@ -1,6 +1,6 @@
 import {inject, observer} from 'mobx-react';
 import { makeStyles, Button, Typography, Divider } from '@material-ui/core';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Delete, ArrowUpward, ArrowDownward } from '@material-ui/icons';
 import NewEvent from './NewEvent';
 
@@ -43,7 +43,6 @@ const EventsList = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(obse
         eventTitle: {
             fontWeight: 'bold',
             cursor: 'pointer',
-            // textAlign: 'center'
             width: '50%'
         }
     }))
@@ -71,7 +70,6 @@ const EventsList = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(obse
         MapStore.removeMarkers(NewStoryStore.eventsList);
         await NewStoryStore.cancelEditing();
         history.push(`/storyPage/${UserStore.userId}/${storyId}`);
-        // MapStore.getNewStoryMarkers(NewStoryStore.eventsList);
     }
 
     const deleteEvent = index => {

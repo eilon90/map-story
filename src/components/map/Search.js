@@ -1,5 +1,5 @@
 import {inject, observer} from 'mobx-react';
-import { makeStyles, Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem, Menu } from '@material-ui/core';
+import { makeStyles, Button, Typography, TextField, FormControl, InputLabel, Select, MenuItem} from '@material-ui/core';
 
 const Search = inject('MapStore')(observer((props) => {
     const {MapStore} = props;
@@ -29,10 +29,6 @@ const Search = inject('MapStore')(observer((props) => {
         },
         textField: {
             marginRight: '2%'
-            // width: '340%',
-        },
-        button: {
-
         }
     }))
     const classes = useStyles();
@@ -54,7 +50,7 @@ const Search = inject('MapStore')(observer((props) => {
                 </Select>
             </FormControl>
             <TextField className = {classes.textField} label="Search address" variant="filled" size = "small" inputProps = {{className: classes.input}} value = {MapStore.searchInput} onChange = {typeSearching} onKeyDown = {searchByEnter}/>
-            <Button className = {classes.button} variant="contained" onClick = {search}>Search</Button>
+            <Button variant="contained" onClick = {search}>Search</Button>
         </div>
     )
 }))

@@ -1,8 +1,8 @@
 import {inject, observer} from 'mobx-react';
 import { makeStyles, Typography, Paper} from '@material-ui/core';
 
-const EventDisplay = inject('UserStore', 'MapStore')(observer((props) => {
-    const {UserStore, MapStore} = props;
+const EventDisplay = inject('UserStore')(observer((props) => {
+    const {UserStore} = props;
     const useStyles = makeStyles(() => ({
         eventDisplay: {
             display: 'flex',
@@ -50,7 +50,6 @@ const EventDisplay = inject('UserStore', 'MapStore')(observer((props) => {
     }))
     const classes = useStyles();
 
-    // const stories = UserStore.user ? UserStore.user.stories : null;
     let thisUser = UserStore.user.stories ? UserStore.user.stories.some(s => s._id === UserStore.currentStoryId) : null;
     if (!UserStore.userId) {thisUser = false}
     let stories;

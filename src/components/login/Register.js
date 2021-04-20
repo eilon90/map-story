@@ -1,10 +1,10 @@
 import { makeStyles, Typography, TextField, Button } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {inject, observer} from 'mobx-react';
 
-const Register = inject('UserStore', 'MapStore')(observer((props) => {
-    const {UserStore, MapStore} = props;
+const Register = inject('UserStore')(observer((props) => {
+    const {UserStore} = props;
     const useStyles = makeStyles(() => ({
         register: {
             display: 'flex',

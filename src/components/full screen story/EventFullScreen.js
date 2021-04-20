@@ -1,7 +1,6 @@
 import {inject, observer} from 'mobx-react';
-import { makeStyles, useTheme, Typography, Paper, BottomNavigation, BottomNavigationAction, MobileStepper, Button } from '@material-ui/core';
+import { makeStyles, useTheme, Typography, BottomNavigation, BottomNavigationAction, MobileStepper, Button } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight, ChevronLeft, ChevronRight } from '@material-ui/icons';
-import { Page } from '../../stores/Page';
 import { Photo, Subject } from '@material-ui/icons';
 
 const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props) => {
@@ -11,9 +10,7 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            // margin: '1% 3%',
             backgroundColor: '#83C5BE',
-            // width: '92%',
             borderRadius: '10px',
             marginBottom: '3%',
             height: '50vh'
@@ -29,17 +26,13 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
         },
         pictureCard: {
             width: '100%'
-            // display: 'flex',
-            // flexDirection: 'column',
-            // alignItems: 'center'
         },
         title: {
             fontWeight: 'bold',
             marginLeft: '3%',
             fontFamily: "'Kavivanar', cursive",
             display: 'inline',
-            width: '20%',
-            // textAlign: 'center'
+            width: '20%'
         },
         eventDes: {
             color: '#222',
@@ -109,7 +102,6 @@ const EventFullScreen = inject('UserStore', 'MapStore', 'Page')(observer((props)
         break;
     }
 
-    // const stories = UserStore.user ? UserStore.user.stories : null;
     const currentStory = stories ? stories.find(s => s._id === UserStore.currentStoryId) : null
     const events = stories ? currentStory.events : null;
     const event = stories ? currentStory.events[UserStore.currentEvent] : null;

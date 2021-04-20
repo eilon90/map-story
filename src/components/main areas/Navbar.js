@@ -2,9 +2,7 @@ import {inject, observer} from 'mobx-react';
 import { makeStyles } from '@material-ui/core';
 import { AppBar, Tab, Tabs, IconButton } from "@material-ui/core";
 import { Link, useHistory } from 'react-router-dom';
-import { ExitToApp } from '@material-ui/icons';
-// import UserPage from '../userPage/UserPage';
-// import SearchUser from '../users/SearchUser';
+import { ExitToApp, Home } from '@material-ui/icons';
 
 const Navbar = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
     const {UserStore, Page, MapStore} = props;
@@ -21,13 +19,6 @@ const Navbar = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
     const classes = useStyles();
     const history = useHistory();
 
-    function a11yProps(index) {
-        return {
-          id: `simple-tab-${index}`,
-          'aria-controls': `simple-tabpanel-${index}`,
-        }
-      }
-
     const signOut = () => {
         MapStore.removeAllMarkers();
         localStorage.clear();
@@ -41,8 +32,9 @@ const Navbar = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
     return (
         <AppBar className = {classes.navbar} position = 'static'>
             <Tabs value = {Page.currentTab} onChange = {changeTab}> 
-                <Tab className = {classes.tab} label = {UserStore.userId ? 'Your stories' : 'Log in'} onClick = {removeMarkers} component={Link}  to = {UserStore.userId ? `/userPage/${UserStore.userId}` : '/login'} {...a11yProps(0)}/>
-                <Tab className = {classes.tab} label = 'Watch stories' onClick = {removeMarkers} component={Link}  to="/searchUser" {...a11yProps(1)}/>
+            {!UserStore.userId && <IconButton onClick = {removeMarkers} component={Link} to="/userPage/607321afe1775a0c7c5af5f8"><Home /></IconButton>}
+                <Tab className = {classes.tab} label = {UserStore.userId ? 'Your stories' : 'Log in'} onClick = {removeMarkers} component={Link}  to = {UserStore.userId ? `/userPage/${UserStore.userId}` : '/login'}/>
+                <Tab className = {classes.tab} label = 'Watch stories' onClick = {removeMarkers} component={Link}  to="/searchUser"/>
             </Tabs>
             {UserStore.userId && <IconButton onClick={signOut}><ExitToApp /></IconButton>}
         </AppBar>

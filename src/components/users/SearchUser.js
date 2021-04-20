@@ -1,11 +1,10 @@
 import {inject, observer} from 'mobx-react';
 import { makeStyles, FormControl, Typography, Select, MenuItem, TextField, Button } from '@material-ui/core';
-import { Link, useHistory } from 'react-router-dom';
-import { Search } from '@material-ui/icons';
+import { useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-const SearchUser = inject('UserStore', 'Page', 'MapStore', 'Search')(observer((props) => {
-    const {UserStore, Page, MapStore, Search} = props;
+const SearchUser = inject('UserStore', 'MapStore', 'Search')(observer((props) => {
+    const {UserStore, MapStore, Search} = props;
     const useStyles = makeStyles(() => ({
         searchUser: {
             display: 'flex',

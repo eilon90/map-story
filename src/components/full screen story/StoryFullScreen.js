@@ -2,8 +2,8 @@ import {inject, observer} from 'mobx-react';
 import { makeStyles, Dialog, Typography } from '@material-ui/core';
 import EventFullScreen from './EventFullScreen';
 
-const StoryFullScreen = inject('UserStore', 'Page', 'MapStore')(observer((props) => {
-    const {UserStore, Page, MapStore} = props;
+const StoryFullScreen = inject('UserStore', 'Page')(observer((props) => {
+    const {UserStore, Page} = props;
     const useStyles = makeStyles(() => ({
         storyFullScreen: {
             backgroundColor: '#83C5BE',
@@ -36,11 +36,8 @@ const StoryFullScreen = inject('UserStore', 'Page', 'MapStore')(observer((props)
         case false: stories = UserStore.watchedUser ? UserStore.watchedUser.stories : null;
         break;
     }
-    // const stories = UserStore.user ? UserStore.user.stories : null;
     const currentStory = stories ? stories.find(s => s._id === UserStore.currentStoryId) : null
     const events = currentStory ? currentStory.events : null;
-    const currentEventCoors = currentStory ? events[UserStore.currentEvent].coordinates : null;
-
     const closeFullScreen = () => {
         UserStore.moveToFirstPhoto();
         Page.closeFullScreen();

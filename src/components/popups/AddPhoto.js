@@ -5,8 +5,8 @@ import { Check, Close } from '@material-ui/icons';
 const axios = require('axios');
 
 
-const AddPhoto = inject('UserStore', 'Page', 'NewStoryStore')(observer((props) => {
-    const {UserStore, Page, NewStoryStore} = props;
+const AddPhoto = inject('Page', 'NewStoryStore')(observer((props) => {
+    const {Page, NewStoryStore} = props;
 
     const useStyles = makeStyles(() => ({
         addPhoto: {
@@ -50,7 +50,7 @@ const AddPhoto = inject('UserStore', 'Page', 'NewStoryStore')(observer((props) =
 
     const uploadPhoto = async e => {
         setLoading(true);
-        if (id) {await axios.post('/deleteImage', {imageId: id})}
+        if (id) {await axios.post('http://localhost:4000/deleteImage', {imageId: id})}
         const file = e.target.files[0];
         const newFormData = new FormData();
         newFormData.append('file', file);
@@ -74,6 +74,7 @@ const AddPhoto = inject('UserStore', 'Page', 'NewStoryStore')(observer((props) =
     }
 
     const cancel = async () => {
+        // if (id) {await axios.post('http://localhost:4000/deleteImage', {imageId: id})}
         if (id) {await axios.post('/deleteImage', {imageId: id})}
         setId('');
         setDescription('');

@@ -5,7 +5,6 @@ const api = require('./server/routes/api');
 require('dotenv').config();
 
 const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGODB_URI||`mongodb+srv://eilon90:${process.env.atlas}@mapstory.k44ic.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connect(`mongodb+srv://eilon90:1234@mapstory.k44ic.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.static(path.join(__dirname, 'build')));

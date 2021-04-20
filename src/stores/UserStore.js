@@ -1,4 +1,4 @@
-import {observable, action, computed, makeObservable} from 'mobx';
+import {observable, action, makeObservable} from 'mobx';
 import L from 'leaflet';
 const axios = require('axios');
 
@@ -6,10 +6,8 @@ export class UserStore {
     constructor() {
 
         this.userId = '';
-        // this.userId = '606e0d76480bac4c3c87429f';
         this.user = {};
         this.currentStoryId = '';
-        // this.otherUser = false;
         this.currentEvent = 0;
         this.currentPhoto = 0;
         this.watchedUser = {}
@@ -21,7 +19,6 @@ export class UserStore {
             currentEvent: observable,
             currentPhoto: observable,
             watchedUser: observable,
-            // otherUser: observable,
             fetchUser: action,
             getStory: action,
             handleNext: action,
@@ -40,13 +37,9 @@ export class UserStore {
     }
 
     fetchUser = async() => {
+      // const user = await axios.get(`http://localhost:4000/user/${this.userId}`);
       const user = await axios.get(`/user/${this.userId}`);
       this.user = user.data;
-      // this.user.stories.forEach(s => {
-      //   s.events.forEach(e => {
-      //     e.marker = L.marker([e.coordinates.latitude, e.coordinates.longtitude]);
-      //   })
-      // })
       this.getColoredMarkers('user');
     }
 
@@ -90,14 +83,15 @@ export class UserStore {
     }
 
     fetchWatchedUser = async(id) => {
+      // const user = await axios.get(`http://localhost:4000/watchedUser/${id}`);
       const user = await axios.get(`/watchedUser/${id}`);
       this.watchedUser = user.data;
-      // this.otherUser = (id === this.userId) ? false : true;
       this.getColoredMarkers('watchedUser');
     }
 
     async login(email, password) {
       try {
+        // const userId = await axios.post(`http://localhost:4000/authenticate`, {email, password});
         const userId = await axios.post(`/authenticate`, {email, password});
         this.userId = userId.data;
         localStorage.setItem('userId', userId.data);
@@ -112,6 +106,7 @@ export class UserStore {
 
     async registerUser(newUser) {
       try {
+        // const userId = await axios.post(`http://localhost:4000/user`, newUser);
         const userId = await axios.post(`/user`, newUser);
         if (userId.data.error) {return userId.data.error}
         this.userId = userId.data;
@@ -128,15 +123,3 @@ export class UserStore {
       this.user = {};
     }
 }
-
-// const greenIcon = new L.Icon({
-//   iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-//   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-//   iconSize: [25, 41],
-//   iconAnchor: [12, 41],
-//   popupAnchor: [1, -34],
-//   shadowSize: [41, 41]
-// });
-// this.user.stories.forEach(s => {
-//   s.events.forEach(e => {
-//     e.marker = L.marker([e.coordinates.latitude, e.coordinates.longtitude], {icon: greenIcon});

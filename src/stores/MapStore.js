@@ -1,15 +1,13 @@
 import axios from 'axios';
-import {observable, action, computed, makeObservable} from 'mobx';
+import {observable, action, makeObservable} from 'mobx';
 import L from 'leaflet';
 
 export class MapStore {
-    // UserStore;
     constructor(userStore, newStoryStore) {
         this.UserStore = userStore;
         this.NewStoryStore = newStoryStore;
         this.map = null;
         this.countries = [];
-        // this.country = '';
         this.bounds = [39.63, 3.33];
         this.searchInput = '';
         this.searchMarker = null;
@@ -19,14 +17,12 @@ export class MapStore {
         makeObservable(this, {
             map: observable,
             countries: observable,
-            // country: observable,
             bounds: observable,
             searchInput: observable,
             searchMarker: observable,
             currentEventMarker: observable,
             editMarker: observable,
             changeCountry: action,
-            // getCountries: action,
             typeSearching: action,
             search: action,
             handleClick: action,
@@ -55,16 +51,11 @@ export class MapStore {
 
     async changeCountry(val) {
         this.country = val;
+        // const result = await axios.get(`http://localhost:4000/bounds/${this.country}`);
         const result = await axios.get(`/bounds/${this.country}`);
         this.bounds = result.data;
         this.map.fitBounds(this.bounds, this.map.getZoom(), {"animate": true, "pan": {"duration": 15}});
     }
-
-    // async getCountries() {
-    //     const results = await axios.get('http://localhost:4000/countries');
-    //     const countries = results.data;
-    //     this.countries = countries;
-    // }
 
     async search() {
         if (!this.country) {
@@ -75,6 +66,7 @@ export class MapStore {
             alert('Please type an address for searching');
             return;
         }
+        // let results = await axios.get(`http://localhost:4000/search/${this.country}/${this.searchInput}`);
         let results = await axios.get(`/search/${this.country}/${this.searchInput}`);
         results = results.data;
         if (results.error === true) {
@@ -171,7 +163,6 @@ export class MapStore {
             case false: stories = this.UserStore.watchedUser ? this.UserStore.watchedUser.stories : null;
             break;
         }
-        // const stories = this.UserStore.user ? this.UserStore.user.stories : null;
         const currentStory = stories ? stories.find(s => s._id === this.UserStore.currentStoryId) : null
         const events = stories ? currentStory.events : null;
         const formerIndex = this.UserStore.currentEvent;

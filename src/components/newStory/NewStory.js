@@ -1,9 +1,9 @@
 import {inject, observer} from 'mobx-react';
-import { Button, makeStyles, TextField, Typography, FormControl, Select, InputLabel, MenuItem } from '@material-ui/core';
-import { Link, useHistory } from 'react-router-dom';
+import { Button, makeStyles, TextField, Typography, FormControl, Select, InputLabel, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
-const NewStory = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observer((props) => {
-    const {UserStore, Page, NewStoryStore, MapStore} = props;
+const NewStory = inject('NewStoryStore', 'MapStore')(observer((props) => {
+    const {NewStoryStore, MapStore} = props;
     const useStyles = makeStyles(() => ({
         newStory: {
             display: 'flex',
@@ -57,13 +57,15 @@ const NewStory = inject('UserStore', 'Page', 'NewStoryStore', 'MapStore')(observ
             <Typography className = {classes.pageTitle} variant = 'h4'>{NewStoryStore.newStory ? 'Create a New Story' : 'Edit the Story'}</Typography>
             <TextField className = {classes.textField}  label = 'Title' value = {NewStoryStore.storyTitle} onChange = {typeTitle}/>
             <TextField className = {classes.textField} label = 'Description' multiline rows={4} variant="outlined" value = {NewStoryStore.storyDescription} onChange = {typeDesc}/>
-            <FormControl variant="outlined" className = {classes.form} size = "small">
-                <Typography variant = 'subtitle2'>Who can watch the story?</Typography>
-                <Select className = {classes.select} labelId="select" value = {NewStoryStore.privatStory} onChange={changePrivacy}>
-                    <MenuItem value = {false}>Every user</MenuItem>
-                    <MenuItem value = {true}>Only me</MenuItem>
-                </Select>
+            <FormControl className = {classes.form} component="fieldset">
+                <FormLabel component="legend">Who can watch the story?</FormLabel>
+
+                <RadioGroup aria-label="private" name="private" className = {classes.select} value = {NewStoryStore.privateStory ? true : false} onChange={changePrivacy}>
+                    <FormControlLabel value = {false} control={<Radio />} label="Every user" />
+                    <FormControlLabel value = {true} control={<Radio />} label="Only me" />
+                </RadioGroup>
             </FormControl>
+
             <Button className = {classes.button} color = 'primary' variant="contained" disabled = {NewStoryStore.storyTitle ? false : true} onClick = {makeMapActive} component={Link} to = '/eventsList'>{NewStoryStore.newStory ? 'Add events to the story' : 'Move to events'}</Button>
             <Button className = {classes.button} variant="contained" onClick = {deleteTitleAndDesc} component={Link}  to={'/'}>Cancel</Button>
         </div>

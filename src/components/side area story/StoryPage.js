@@ -1,7 +1,7 @@
 import {inject, observer} from 'mobx-react';
 import { makeStyles, useTheme, Typography, MobileStepper, Button } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight, Edit } from '@material-ui/icons';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import EventDisplay from './EventDisplay';
 import StoryFullScreen from '../full screen story/StoryFullScreen';
@@ -25,7 +25,9 @@ const StoryPage = inject('UserStore', 'MapStore', 'Page', 'NewStoryStore')(obser
         title: {
             textAlign: 'center',
             marginTop: '3%',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            color: '#3d405b',
+            fontSize: 'xx-large'
         },
         stepper: {
             backgroundColor: '#83C5BE',
@@ -62,7 +64,6 @@ const StoryPage = inject('UserStore', 'MapStore', 'Page', 'NewStoryStore')(obser
     const currentStory = stories ? stories.find(s => s._id === storyId) : null
     const events = currentStory ? currentStory.events : null;
     const numOfEvents = currentStory ? events.length : null;
-    // const currentEventCoors = currentStory ? events[UserStore.currentEvent].coordinates : null;
 
     useEffect(() => {
         if (!thisUser && !UserStore.watchedUser._id) {UserStore.fetchWatchedUser(userId)}
